@@ -205,21 +205,22 @@ justify-content: center;
 margin-top: 40px;
 }
 
+/* 🎨 Style inspiré d'un ancien Pokédex */
 .popup {
   display: none;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 90%; /* Ajustement pour écrans plus petits */
-  max-width: 350px; /* Largeur maximale */
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 350px;
+  background: linear-gradient(to bottom, #D32F2F, #B71C1C); /* Dégradé rouge Pokédex */
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
   padding: 20px;
   text-align: center;
   z-index: 1001;
-  overflow: hidden;
+  border: 3px solid #000; /* Bordure noire comme un Pokédex */
 }
 
 .popup-content {
@@ -233,23 +234,89 @@ margin-top: 40px;
 .close-btn {
   position: absolute;
   top: 10px;
-  left: 10px; /* Déplacé à gauche */
+  left: 10px;
   font-size: 24px;
   cursor: pointer;
   font-weight: bold;
+  color: white; /* Flèche blanche pour contraste */
+  background: black;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup h2 {
+  font-family: "Press Start 2P", sans-serif; /* Police rétro type Game Boy */
+  color: #FFD700; /* Jaune doré */
+  text-shadow: 2px 2px 2px black;
+  font-size: 16px;
 }
 
 .popup img {
-  width: 100px; /* Ajusté pour s'adapter */
+  width: 100px;
   margin: 10px auto;
+  background: white;
+  border: 3px solid black;
+  border-radius: 8px;
+  padding: 5px;
 }
 
 .popup p {
   font-size: 14px;
   margin-top: 10px;
   text-align: justify;
-  padding: 0 15px; /* Augmenté pour éviter les coupures */
+  padding: 0 15px;
+  color: white;
+  font-family: "Press Start 2P", sans-serif;
   overflow-wrap: break-word;
   word-wrap: break-word;
   max-width: 100%;
+}
+
+/* Ajout d'un écran pour simuler un affichage rétro */
+.pokedex-screen {
+  background: #333;
+  padding: 8px;
+  border-radius: 10px;
+  border: 2px solid black;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.type-icon {
+  width: 24px;  /* Taille adaptée */
+  height: 24px;
+  object-fit: contain;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.type-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 5px; /* Espacement entre les icônes */
+  margin-top: 4px;
+}
+
+.type-label {
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  text-transform: uppercase;
+  margin-right: 5px;
+}
+
+.type-icon-container {
+  display: flex;
+  gap: 3px; /* Réduction de l’espace entre les icônes */
+  padding: 3px 4px; /* Cadre plus petit */
+  background: white;
+  border-radius: 5px;
+  border: 1px solid black;
 }

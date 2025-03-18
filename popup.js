@@ -17,6 +17,35 @@ const popupPokemonImg = document.getElementById("popup-pokemon-img");
 const popupPokemonType = document.getElementById("popup-pokemon-type");
 const popupPokemonDescription = document.getElementById("popup-pokemon-description");
 
+// 🎨 Dictionnaire des icônes des types Pokémon (en utilisant tes fichiers)
+const typeIcons = {
+  normal: "images/type/normal.png",
+  fire: "images/type/fire.png",
+  water: "images/type/water.png",
+  electric: "images/type/electric.png",
+  grass: "images/type/grass.png",
+  ice: "images/type/ice.png",
+  fighting: "images/type/fighting.png",
+  poison: "images/type/poison.png",
+  ground: "images/type/ground.png",
+  flying: "images/type/flying.png",
+  psychic: "images/type/psychic.png",
+  bug: "images/type/bug.png",
+  rock: "images/type/rock.png",
+  ghost: "images/type/ghost.png",
+  dragon: "images/type/dragon.png",
+  dark: "images/type/dark.png",
+  steel: "images/type/steel.png",
+  fairy: "images/type/fairy.png"
+};
+
+// 🟢 Fonction pour afficher les icônes des types
+function getTypeIcons(types) {
+    return types.split(", ").map(type =>
+        `<img src="${typeIcons[type]}" alt="${type}" class="type-icon">`
+    ).join(" ");
+}
+
 // 🟢 Fonction pour récupérer le nom dans la langue sélectionnée (avec cache)
 async function getPokemonName(pokemonId, speciesData) {
     const selectedLanguage = localStorage.getItem('selectedLanguage') || 'fr';
@@ -36,7 +65,7 @@ async function getPokemonName(pokemonId, speciesData) {
     return name;
 }
 
-// 🟢 Optimisation : Chargement rapide des Pokémon capturés
+// 🟢 Fonction pour récupérer les détails d'un Pokémon (Optimisé)
 async function fetchPokemonById(pokemonId) {
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
     if (!res.ok) throw new Error('Erreur API Pokémon');
@@ -59,13 +88,22 @@ async function fetchPokemonById(pokemonId) {
 
 // 🟢 Fonction pour afficher la popup d'un Pokémon
 function displayPokemonPopup(pokemon) {
-    popupPokemonName.textContent = pokemon.name;
-    popupPokemonImg.src = pokemon.img;
-    popupPokemonType.textContent = "Type : " + pokemon.type;
-    popupPokemonDescription.textContent = pokemon.description;
+  popupPokemonName.textContent = pokemon.name;
+  popupPokemonImg.src = pokemon.img;
 
-    popup.style.display = "block";
+  popupPokemonType.innerHTML = `
+      <div class="type-container">
+          <span class="type-label">Type :</span>
+          <div class="type-icon-container">
+              ${getTypeIcons(pokemon.type)}
+          </div>
+      </div>
+  `;
+
+  popupPokemonDescription.textContent = pokemon.description;
+  popup.style.display = "block";
 }
+
 
 // Fermer la popup
 popupCloseBtn.addEventListener("click", () => {
@@ -97,7 +135,6 @@ async function displayPokedex() {
             });
         });
 
-        // Mettre à jour le nombre de Pokémon capturés
         fetch('https://pokeapi.co/api/v2/pokemon-species/?limit=1')
             .then(res => res.json())
             .then(data => {
@@ -150,22 +187,10 @@ pokeballBtn.addEventListener('click', async () => {
 });
 
 // 🟢 Gestion du changement de langue via le switch
-function updateLanguageLabel() {
-    const selectedLanguage = languageToggle.checked ? 'en' : 'fr';
-    languageLabel.textContent = selectedLanguage === 'en' ? "English" : "Français";
-    localStorage.setItem('selectedLanguage', selectedLanguage);
-    displayPokedex();
-}
-
-// 🟢 Événements pour changer la langue et le tri
-languageToggle.addEventListener('change', updateLanguageLabel);
-document.getElementById('filter-pokedex').addEventListener('change', displayPokedex);
-
-// 🟢 Charger la langue sélectionnée et mettre à jour le Pokédex
-document.addEventListener('DOMContentLoaded', () => {
-    const savedLanguage = localStorage.getItem('selectedLanguage') || 'fr';
-    languageToggle.checked = savedLanguage === 'en';
-    languageLabel.textContent = savedLanguage === 'en' ? "English" : "Français";
-
+languageToggle.addEventListener('change', () => {
+    localStorage.setItem('selectedLanguage', languageToggle.checked ? 'en' : 'fr');
     displayPokedex();
 });
+
+// 🟢 Charger la langue sélectionnée et mettre à jour le Pokédex
+document.addEventListener('DOMContentLoaded', displayPokedex);
