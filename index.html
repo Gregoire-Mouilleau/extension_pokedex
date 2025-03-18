@@ -6,6 +6,16 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+  <!-- Conteneur du mode de langue en haut à droite -->
+  <div class="top-right-container">
+    <label class="switch">
+      <input type="checkbox" id="language-toggle">
+      <span class="slider"></span>
+    </label>
+    <span id="language-label">Français</span>
+  </div>
+
   <button id="open-pokeball">
     <img src="pokeball.png" alt="Pokéball" class="button-icon">
     Ouvrir Pokéball
@@ -18,6 +28,12 @@
   </h3>
 
   <p id="pokedex-count">0 Pokémon capturés</p>
+
+  <!-- Filtre de tri -->
+  <select id="filter-pokedex">
+    <option value="capture">Ordre de capture</option>
+    <option value="number">Numéro du Pokédex</option>
+  </select>
 
   <ul id="pokedex-list"></ul>
 
