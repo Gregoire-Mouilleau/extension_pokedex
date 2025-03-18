@@ -7,20 +7,28 @@
 </head>
 <body>
 
-  <!-- Conteneur du mode de langue en haut à droite -->
+  <!-- Conteneur aligné pour placer le switch en haut à droite -->
   <div class="top-right-container">
-    <label class="switch">
-      <input type="checkbox" id="language-toggle">
-      <span class="slider"></span>
-    </label>
-    <span id="language-label">Français</span>
+    <div class="language-container">
+      <label class="switch">
+        <input type="checkbox" id="language-toggle">
+        <span class="slider"></span>
+      </label>
+      <span id="language-label">Français</span>
+    </div>
   </div>
 
-  <button id="open-pokeball">
-    <img src="pokeball.png" alt="Pokéball" class="button-icon">
-    Ouvrir Pokéball
-  </button>
-  <div id="pokemon-result"></div>
+  <!-- Conteneur pour le bouton de capture, centré -->
+  <div class="capture-container">
+    <button id="open-pokeball">
+      <img src="pokeball.png" alt="Pokéball" class="button-icon">
+      Ouvrir Pokéball
+    </button>
+  </div>
+
+  <div id="pokemon-result-container">
+    <div id="pokemon-result"></div>
+  </div>
 
   <h3>
     <img src="pokedex.png" alt="Pokédex" class="title-icon">
