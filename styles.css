@@ -1,0 +1,122 @@
+body {
+    font-family: Arial, sans-serif;
+    width: 250px;
+    text-align: center;
+  }
+  
+  button {
+    cursor: pointer;
+    padding: 8px 15px;
+    margin: 10px;
+  }
+  
+  #pokemon-result img {
+    width: 100px;
+  }
+  
+  #pokedex-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  #pokedex-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  #pokedex-list li {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .pokedex-img {
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
+  }
+
+  .button-icon {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 5px;
+  }
+  
+  .title-icon {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 5px;
+  }
+  
+  .pokemon-container {
+    width: 32px;
+    height: 32px;
+    position: relative;
+  }
+
+  .pokemon-name {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.8);
+    color: #fff;
+    padding: 2px 5px;
+    border-radius: 4px;
+    white-space: nowrap;
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .pokemon-container:hover .pokemon-name {
+    display: block;
+  }
+
+  .pokemon-result-container {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px auto;
+  }
+  
+  .pokemon-result-container.common {
+    background-color: #ccc; /* gris */
+  }
+  
+  .pokemon-result-container.rare {
+    background-color: #6db7ff; /* bleu clair */
+  }
+  
+  .pokemon-result-container.legendary {
+    background-color: #ffd700; /* doré */
+  }
+  
+  .pokemon-result-container img {
+    width: 80%;
+    height: 80%;
+  }
+
+  .pokemon-container.common {
+    background-color: #ccc; /* gris */
+  }
+  
+  .pokemon-container.rare {
+    background-color: #6db7ff; /* bleu clair */
+  }
+  
+  .pokemon-container.legendary {
+    background-color: #ffd700; /* doré */
+  }
+  

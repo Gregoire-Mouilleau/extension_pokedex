@@ -1,0 +1,18 @@
+{
+    "manifest_version": 3,
+    "name": "Mon Pokédex",
+    "version": "1.0",
+    "action": {
+      "default_popup": "index.html",
+      "default_icon": {
+        "16": "pokeball.png",
+        "48": "pokeball.png",
+        "128": "pokeball.png"
+      }
+    },
+    "permissions": ["storage"],
+    "host_permissions": [
+      "https://pokeapi.co/api/v2/*"
+    ]
+  }
+  
