@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Détails du Pokémon</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 id="pokemon-name"></h1>
+    <img id="pokemon-img" src="" alt="Pokémon">
+    <p id="pokemon-type"></p>
+    <p id="pokemon-description"></p>
+
+    <script>
+        async function loadPokemonDetails() {
+            const params = new URLSearchParams(window.location.search);
+            const pokemonId = params.get('id');
+
+            if (!pokemonId) {
+                document.body.innerHTML = "<p>Erreur : Aucun Pokémon sélectionné.</p>";
+                return;
+            }
+
+            const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
+            const pokemon = await res.json();
+            const speciesRes = await fetch(pokemon.species.url);
+            const speciesData = await speciesRes.json();
+
+            document.getElementById("pokemon-name").textContent = speciesData.names.find(n => n.language.name === 'fr')?.name || pokemon.name;
+            document.getElementById("pokemon-img").src = pokemon.sprites.front_default;
+            document.getElementById("pokemon-type").textContent = "Type(s) : " + pokemon.types.map(t => t.type.name).join(", ");
+            document.getElementById("pokemon-description").textContent = speciesData.flavor_text_entries.find(f => f.language.name === 'fr')?.flavor_text || "Pas de description.";
+        }
+
+        document.addEventListener("DOMContentLoaded", loadPokemonDetails);
+    </script>
+</body>
+</html>
