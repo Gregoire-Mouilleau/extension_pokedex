@@ -156,7 +156,18 @@ pokeballBtn?.addEventListener('click', async () => {
 
             chrome.storage.local.get([pokedexKey], (result) => {
                 let pokedex = result[pokedexKey] || [];
-                if (!pokedex.some(p => p.id === pokemon.id)) {
+                let isNew = !pokedex.some(p => p.id === pokemon.id);
+            
+                if (isNew) {
+                    let pokemonContainer = document.querySelector('.pokemon-result-container');
+                    pokemonContainer.style.position = "relative"; // S'assure que l'image est bien positionnée
+                    let newLabel = document.createElement("span");
+                    newLabel.className = "new-pokemon";
+                    newLabel.textContent = "New!";
+                    pokemonContainer.appendChild(newLabel);
+                }
+            
+                if (isNew) {
                     pokedex.push({
                         id: pokemon.id,
                         name: pokemon.name,
@@ -167,6 +178,7 @@ pokeballBtn?.addEventListener('click', async () => {
                     chrome.storage.local.set({ [pokedexKey]: pokedex }, displayPokedex);
                 }
             });
+            
 
             chrome.storage.local.set({ [lastOpenKey]: now });
         } catch (error) {

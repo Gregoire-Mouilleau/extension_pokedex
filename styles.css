@@ -318,3 +318,20 @@ margin-top: 40px;
   padding: 3px 4px; /* Cadre plus petit */
   border-radius: 5px;
 }
+
+.new-pokemon {
+  position: absolute;
+  top: 50%;
+  right: -45px; /* Décale vers la droite */
+  transform: translateY(-50%); /* Centre verticalement */
+  background-color: red;
+  color: black;
+  font-weight: bold;
+  font-size: 12px;
+  border: 1px solid black;
+  padding: 2px 5px;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+
+
