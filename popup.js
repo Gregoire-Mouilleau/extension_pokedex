@@ -64,6 +64,34 @@ async function fetchPokemonById(pokemonId) {
 // 🟢 Fonction pour afficher la popup d'un Pokémon
 function displayPokemonPopup(pokemon) {
     document.getElementById("popup-pokemon-name").textContent = pokemon.name;
+
+    // Supprimer toute rareté existante avant d'en ajouter une nouvelle
+    let existingRarity = document.getElementById("popup-pokemon-rarity");
+    if (existingRarity) {
+        existingRarity.remove();
+    }
+
+    // Créer un nouvel élément pour afficher la rareté
+    let rarityContainer = document.createElement("div");
+    rarityContainer.id = "popup-pokemon-rarity";
+    rarityContainer.classList.add("rarity-container");
+
+    // Définir la couleur de fond et le texte selon la rareté
+    if (pokemon.rarity === "common") {
+        rarityContainer.classList.add("rarity-common");
+        rarityContainer.textContent = "Commun";
+    } else if (pokemon.rarity === "rare") {
+        rarityContainer.classList.add("rarity-rare");
+        rarityContainer.textContent = "Rare";
+    } else if (pokemon.rarity === "legendary") {
+        rarityContainer.classList.add("rarity-legendary");
+        rarityContainer.textContent = "Légendaire";
+    }
+
+    // Insérer la rareté sous le nom et au-dessus de l'image
+    let popupName = document.getElementById("popup-pokemon-name");
+    popupName.insertAdjacentElement("afterend", rarityContainer);
+
     document.getElementById("popup-pokemon-img").src = pokemon.img;
 
     document.getElementById("popup-pokemon-type").innerHTML = `
