@@ -316,7 +316,5 @@ margin-top: 40px;
   display: flex;
   gap: 3px; /* Réduction de l’espace entre les icônes */
   padding: 3px 4px; /* Cadre plus petit */
-  background: white;
   border-radius: 5px;
-  border: 1px solid black;
 }

@@ -3,21 +3,13 @@ const pokemonResult = document.getElementById('pokemon-result');
 const pokedexList = document.getElementById('pokedex-list');
 const pokedexCount = document.getElementById('pokedex-count');
 const languageToggle = document.getElementById('language-toggle');
-const languageLabel = document.getElementById('language-label');
+const languageLabel = document.getElementById('language-label'); // ✅ Ajout de la gestion du texte du switch
+const sortSelect = document.getElementById('sort-select');
 
 const lastOpenKey = 'lastOpenTimestamp';
 const pokedexKey = 'myPokedex';
-const nameCacheKey = 'pokemonNamesCache';
 
-// Élément de la popup
-const popup = document.getElementById("pokemon-popup");
-const popupCloseBtn = document.querySelector(".close-btn");
-const popupPokemonName = document.getElementById("popup-pokemon-name");
-const popupPokemonImg = document.getElementById("popup-pokemon-img");
-const popupPokemonType = document.getElementById("popup-pokemon-type");
-const popupPokemonDescription = document.getElementById("popup-pokemon-description");
-
-// 🎨 Dictionnaire des icônes des types Pokémon (en utilisant tes fichiers)
+// 🎨 Définition des icônes des types
 const typeIcons = {
   normal: "images/type/normal.png",
   fire: "images/type/fire.png",
@@ -46,26 +38,7 @@ function getTypeIcons(types) {
     ).join(" ");
 }
 
-// 🟢 Fonction pour récupérer le nom dans la langue sélectionnée (avec cache)
-async function getPokemonName(pokemonId, speciesData) {
-    const selectedLanguage = localStorage.getItem('selectedLanguage') || 'fr';
-    let nameCache = JSON.parse(localStorage.getItem(nameCacheKey)) || {};
-
-    if (nameCache[pokemonId] && nameCache[pokemonId][selectedLanguage]) {
-        return nameCache[pokemonId][selectedLanguage];
-    }
-
-    const nameEntry = speciesData.names.find(n => n.language.name === selectedLanguage);
-    const name = nameEntry ? nameEntry.name : speciesData.name;
-
-    if (!nameCache[pokemonId]) nameCache[pokemonId] = {};
-    nameCache[pokemonId][selectedLanguage] = name;
-    localStorage.setItem(nameCacheKey, JSON.stringify(nameCache));
-
-    return name;
-}
-
-// 🟢 Fonction pour récupérer les détails d'un Pokémon (Optimisé)
+// 🟢 Fonction pour récupérer les détails d'un Pokémon avec la langue sélectionnée
 async function fetchPokemonById(pokemonId) {
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
     if (!res.ok) throw new Error('Erreur API Pokémon');
@@ -73,7 +46,9 @@ async function fetchPokemonById(pokemonId) {
     const speciesRes = await fetch(pokemon.species.url);
     const speciesData = await speciesRes.json();
 
-    const pokemonName = await getPokemonName(pokemonId, speciesData);
+    // ✅ Assurer que la langue sélectionnée est bien prise en compte
+    const selectedLanguage = localStorage.getItem('selectedLanguage') === "en" ? "en" : "fr";
+    const pokemonName = speciesData.names.find(n => n.language.name === selectedLanguage)?.name || speciesData.name;
 
     return {
         id: pokemon.id,
@@ -82,43 +57,49 @@ async function fetchPokemonById(pokemonId) {
         rarity: speciesData.is_legendary || speciesData.is_mythical ? "legendary" :
                 speciesData.capture_rate <= 45 ? "rare" : "common",
         type: pokemon.types.map(t => t.type.name).join(", "),
-        description: speciesData.flavor_text_entries.find(f => f.language.name === localStorage.getItem('selectedLanguage'))?.flavor_text || "Pas de description."
+        description: speciesData.flavor_text_entries.find(f => f.language.name === selectedLanguage)?.flavor_text || "Pas de description."
     };
 }
 
 // 🟢 Fonction pour afficher la popup d'un Pokémon
 function displayPokemonPopup(pokemon) {
-  popupPokemonName.textContent = pokemon.name;
-  popupPokemonImg.src = pokemon.img;
+    document.getElementById("popup-pokemon-name").textContent = pokemon.name;
+    document.getElementById("popup-pokemon-img").src = pokemon.img;
 
-  popupPokemonType.innerHTML = `
-      <div class="type-container">
-          <span class="type-label">Type :</span>
-          <div class="type-icon-container">
-              ${getTypeIcons(pokemon.type)}
-          </div>
-      </div>
-  `;
+    document.getElementById("popup-pokemon-type").innerHTML = `
+        <div class="type-container">
+            <span class="type-label">Type :</span>
+            <div class="type-icon-container">
+                ${getTypeIcons(pokemon.type)}
+            </div>
+        </div>
+    `;
 
-  popupPokemonDescription.textContent = pokemon.description;
-  popup.style.display = "block";
+    document.getElementById("popup-pokemon-description").textContent = pokemon.description;
+    document.getElementById("pokemon-popup").style.display = "block";
+
+    // ✅ Réactiver le bouton de fermeture
+    document.querySelector(".close-btn").onclick = () => {
+        document.getElementById("pokemon-popup").style.display = "none";
+    };
 }
 
-
-// Fermer la popup
-popupCloseBtn.addEventListener("click", () => {
-    popup.style.display = "none";
-});
-
-// 🟢 Chargement rapide du Pokédex
 async function displayPokedex() {
     chrome.storage.local.get([pokedexKey], async (result) => {
         let pokedex = result[pokedexKey] || [];
+        const selectedLanguage = localStorage.getItem('selectedLanguage') === "en" ? "en" : "fr";
 
         for (let i = 0; i < pokedex.length; i++) {
             const speciesRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokedex[i].id}/`);
             const speciesData = await speciesRes.json();
-            pokedex[i].name = await getPokemonName(pokedex[i].id, speciesData);
+            pokedex[i].name = speciesData.names.find(n => n.language.name === selectedLanguage)?.name || speciesData.name;
+        }
+
+        const sortOption = sortSelect?.value || "capture"; // ✅ Par défaut, tri par capture
+        if (sortOption === "pokedex") {
+            pokedex.sort((a, b) => a.id - b.id);
+        } else {
+            pokedex.sort((a, b) => a.capturedAt - b.capturedAt);
         }
 
         pokedexList.innerHTML = pokedex.map(p => `
@@ -128,33 +109,44 @@ async function displayPokedex() {
             </li>`).join('');
 
         document.querySelectorAll(".pokemon-container").forEach(pokemonElement => {
-            pokemonElement.addEventListener("click", async () => {
-                const pokemonId = pokemonElement.getAttribute("data-id");
+            pokemonElement.addEventListener("click", async (event) => {
+                const pokemonId = event.currentTarget.dataset.id;
                 const pokemonData = await fetchPokemonById(pokemonId);
                 displayPokemonPopup(pokemonData);
             });
         });
 
-        fetch('https://pokeapi.co/api/v2/pokemon-species/?limit=1')
-            .then(res => res.json())
-            .then(data => {
-                const totalPokemon = data.count;
-                pokedexCount.textContent = `${pokedex.length} / ${totalPokemon} Pokémon capturés`;
-            });
+        pokedexCount.textContent = `${pokedex.length} Pokémon capturés`;
     });
 }
 
-// 🟢 Capture d'un Pokémon avec optimisation
-pokeballBtn.addEventListener('click', async () => {
+// 🟢 Ajout de l'écouteur d'événements pour gérer le tri
+sortSelect?.addEventListener('change', displayPokedex);
+
+pokeballBtn?.addEventListener('click', async () => {
     const now = Date.now();
     const result = await chrome.storage.local.get([lastOpenKey]);
     const lastOpen = result[lastOpenKey] || 0;
 
-    if (now - lastOpen >= 1000) { // cooldown 1 seconde pour tests rapides
+    if (now - lastOpen >= 1000) { // cooldown 1 seconde
         try {
             const pokemonId = Math.floor(Math.random() * 1025) + 1;
-            const pokemon = await fetchPokemonById(pokemonId);
 
+            // ✅ Gestion de la rareté avec les bonnes probabilités
+            const rarityRoll = Math.random() * 100;
+            let rarity;
+            if (rarityRoll < 89) {
+                rarity = "common";
+            } else if (rarityRoll < 99) {
+                rarity = "rare";
+            } else {
+                rarity = "legendary";
+            }
+
+            const pokemon = await fetchPokemonById(pokemonId);
+            pokemon.rarity = rarity;
+
+            // ✅ Affichage immédiat du Pokémon capturé
             pokemonResult.innerHTML = `
                 <div class="pokemon-result-container ${pokemon.rarity}">
                     <img src="${pokemon.img}">
@@ -180,17 +172,19 @@ pokeballBtn.addEventListener('click', async () => {
         } catch (error) {
             pokemonResult.innerHTML = `<p>Erreur de chargement : ${error.message}</p>`;
         }
-    } else {
-        const remainingSeconds = Math.ceil((1000 - (now - lastOpen)) / 1000);
-        pokemonResult.innerHTML = `<p>⏳ Attends ${remainingSeconds} secondes !</p>`;
     }
 });
 
-// 🟢 Gestion du changement de langue via le switch
-languageToggle.addEventListener('change', () => {
-    localStorage.setItem('selectedLanguage', languageToggle.checked ? 'en' : 'fr');
+// 🟢 Gestion du changement de langue et mise à jour du label du switch
+languageToggle?.addEventListener('change', () => {
+    const newLanguage = languageToggle.checked ? 'en' : 'fr';
+    localStorage.setItem('selectedLanguage', newLanguage);
+    languageLabel.textContent = newLanguage === "en" ? "English" : "Français"; // ✅ Mise à jour du texte du switch
     displayPokedex();
 });
 
-// 🟢 Charger la langue sélectionnée et mettre à jour le Pokédex
-document.addEventListener('DOMContentLoaded', displayPokedex);
+// 🟢 Charger la langue et mettre à jour le Pokédex
+document.addEventListener('DOMContentLoaded', () => {
+    languageLabel.textContent = localStorage.getItem('selectedLanguage') === "en" ? "English" : "Français";
+    displayPokedex();
+});
