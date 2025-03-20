@@ -46,7 +46,6 @@ async function fetchPokemonById(pokemonId) {
     const speciesRes = await fetch(pokemon.species.url);
     const speciesData = await speciesRes.json();
 
-    // ✅ Assurer que la langue sélectionnée est bien prise en compte
     const selectedLanguage = localStorage.getItem('selectedLanguage') === "en" ? "en" : "fr";
     const pokemonName = speciesData.names.find(n => n.language.name === selectedLanguage)?.name || speciesData.name;
 
@@ -54,6 +53,7 @@ async function fetchPokemonById(pokemonId) {
         id: pokemon.id,
         name: pokemonName,
         img: pokemon.sprites.front_default,
+        shinyImg: pokemon.sprites.front_shiny, // 🔹 Ajout du sprite shiny
         rarity: speciesData.is_legendary || speciesData.is_mythical ? "legendary" :
                 speciesData.capture_rate <= 45 ? "rare" : "common",
         type: pokemon.types.map(t => t.type.name).join(", "),
@@ -156,28 +156,17 @@ pokeballBtn?.addEventListener('click', async () => {
     const result = await chrome.storage.local.get([lastOpenKey]);
     const lastOpen = result[lastOpenKey] || 0;
 
-    if (now - lastOpen >= 1000) { // cooldown 1 seconde
+    if (now - lastOpen >= 1000) {
         try {
             const pokemonId = Math.floor(Math.random() * 1025) + 1;
-
-            // ✅ Gestion de la rareté avec les bonnes probabilités
-            const rarityRoll = Math.random() * 100;
-            let rarity;
-            if (rarityRoll < 89) {
-                rarity = "common";
-            } else if (rarityRoll < 99) {
-                rarity = "rare";
-            } else {
-                rarity = "legendary";
-            }
-
+            const isShiny = Math.random() < 0.5; // 🔹 1% de chance d'être shiny
             const pokemon = await fetchPokemonById(pokemonId);
-            pokemon.rarity = rarity;
+            pokemon.isShiny = isShiny;
 
-            // ✅ Affichage immédiat du Pokémon capturé
             pokemonResult.innerHTML = `
                 <div class="pokemon-result-container ${pokemon.rarity}">
-                    <img src="${pokemon.img}">
+                    <img src="${pokemon.isShiny ? pokemon.shinyImg : pokemon.img}" class="${pokemon.isShiny ? 'shiny-effect' : ''}">
+                    ${pokemon.isShiny ? '<span class="shiny-indicator">✨</span>' : ''}
                 </div>
                 <h4>${pokemon.name}</h4>
             `;
@@ -185,29 +174,19 @@ pokeballBtn?.addEventListener('click', async () => {
             chrome.storage.local.get([pokedexKey], (result) => {
                 let pokedex = result[pokedexKey] || [];
                 let isNew = !pokedex.some(p => p.id === pokemon.id);
-            
-                if (isNew) {
-                    let pokemonContainer = document.querySelector('.pokemon-result-container');
-                    pokemonContainer.style.position = "relative"; // S'assure que l'image est bien positionnée
-                    let newLabel = document.createElement("span");
-                    newLabel.className = "new-pokemon";
-                    newLabel.textContent = "New!";
-                    pokemonContainer.appendChild(newLabel);
-                }
-            
+
                 if (isNew) {
                     pokedex.push({
                         id: pokemon.id,
                         name: pokemon.name,
-                        img: pokemon.img,
+                        img: pokemon.isShiny ? pokemon.shinyImg : pokemon.img,
                         rarity: pokemon.rarity,
+                        isShiny: pokemon.isShiny,
                         capturedAt: Date.now()
                     });
-                    chrome.storage.local.set({ [pokedexKey]: pokedex }, displayPokedex);
+                    chrome.storage.local.set({ [pokedexKey]: pokedex });
                 }
             });
-            
-
             chrome.storage.local.set({ [lastOpenKey]: now });
         } catch (error) {
             pokemonResult.innerHTML = `<p>Erreur de chargement : ${error.message}</p>`;
