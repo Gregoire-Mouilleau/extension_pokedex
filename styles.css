@@ -362,3 +362,11 @@ margin-top: 40px;
   background-color: #ffd700; /* Doré */
   color: black;
 }
+
+.shiny-indicator {
+  position: absolute;
+  top: 30%;  /* Centre verticalement */
+  left: 70%; /* La décale légèrement à droite du cercle */
+  transform: translateY(-50%);  /* Ajuste l'alignement vertical */
+  font-size: 20px;  /* Ajuste la taille */
+}
