@@ -134,7 +134,8 @@ async function displayPokedex() {
             <li class="pokemon-container ${p.rarity}" data-id="${p.id}">
                 <img src="${p.img}" alt="${p.name}" class="pokedex-img">
                 <span class="pokemon-name">${p.name}</span>
-            </li>`).join('');
+                ${p.isNew ? '<span class="new-pokemon">NEW</span>' : ''}
+            </li>`).join('');                    
 
         document.querySelectorAll(".pokemon-container").forEach(pokemonElement => {
             pokemonElement.addEventListener("click", async (event) => {
@@ -159,40 +160,65 @@ pokeballBtn?.addEventListener('click', async () => {
     if (now - lastOpen >= 1000) {
         try {
             const pokemonId = Math.floor(Math.random() * 1025) + 1;
-            const isShiny = Math.random() < 0.5; // 🔹 1% de chance d'être shiny
+            const isShiny = Math.random() < 0.5;
             const pokemon = await fetchPokemonById(pokemonId);
             pokemon.isShiny = isShiny;
 
+            let isNew = false;
+            pokemonResult.innerHTML = `
+            <div class="pokemon-result-container ${pokemon.rarity}">
+                <img src="${pokemon.isShiny ? pokemon.shinyImg : pokemon.img}" class="${pokemon.isShiny ? 'shiny-effect' : ''}">
+                ${pokemon.isShiny ? '<span class="shiny-indicator">✨</span>' : ''}
+                ${isNew ? '<span class="new-pokemon">NEW</span>' : ''}
+            </div>
+            <h4>${pokemon.name}</h4>
+        `;        
+
+        chrome.storage.local.get([pokedexKey], (result) => {
+            let pokedex = result[pokedexKey] || [];
+            isNew = !pokedex.some(p => p.id === pokemon.id); // ✅ Vérifie si c'est un nouveau Pokémon
+        
             pokemonResult.innerHTML = `
                 <div class="pokemon-result-container ${pokemon.rarity}">
                     <img src="${pokemon.isShiny ? pokemon.shinyImg : pokemon.img}" class="${pokemon.isShiny ? 'shiny-effect' : ''}">
                     ${pokemon.isShiny ? '<span class="shiny-indicator">✨</span>' : ''}
+                    ${isNew ? '<span class="new-pokemon">NEW</span>' : ''}
                 </div>
                 <h4>${pokemon.name}</h4>
             `;
-
-            chrome.storage.local.get([pokedexKey], (result) => {
-                let pokedex = result[pokedexKey] || [];
-                let isNew = !pokedex.some(p => p.id === pokemon.id);
-
-                if (isNew) {
-                    pokedex.push({
-                        id: pokemon.id,
-                        name: pokemon.name,
-                        img: pokemon.isShiny ? pokemon.shinyImg : pokemon.img,
-                        rarity: pokemon.rarity,
-                        isShiny: pokemon.isShiny,
-                        capturedAt: Date.now()
-                    });
+        
+            if (isNew) {
+                const newPokemon = {
+                    id: pokemon.id,
+                    name: pokemon.name,
+                    img: pokemon.isShiny ? pokemon.shinyImg : pokemon.img,
+                    rarity: pokemon.rarity,
+                    isShiny: pokemon.isShiny,
+                    capturedAt: Date.now(),
+                    isNew: true
+                };
+        
+                pokedex.push(newPokemon);
+                chrome.storage.local.set({ [pokedexKey]: pokedex }, () => {
+                    displayPokedex();
+                });
+        
+                setTimeout(() => {
+                    console.log("Suppression du badge NEW pour:", pokemon.name);
+                    pokedex = pokedex.map(p => p.id === pokemon.id ? { ...p, isNew: false } : p);
                     chrome.storage.local.set({ [pokedexKey]: pokedex });
-                }
-            });
+                    displayPokedex();
+                }, 5000);
+            }
+        });        
+
             chrome.storage.local.set({ [lastOpenKey]: now });
         } catch (error) {
             pokemonResult.innerHTML = `<p>Erreur de chargement : ${error.message}</p>`;
         }
     }
-});
+}); // ✅ ICI : ferme le addEventListener correctement
+
 
 // 🟢 Gestion du changement de langue et mise à jour du label du switch
 languageToggle?.addEventListener('change', () => {

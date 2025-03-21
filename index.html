@@ -30,20 +30,23 @@
     <div id="pokemon-result"></div>
   </div>
 
-  <h3>
-    <img src="images/general/pokedex.png" alt="Pokédex" class="title-icon">
-    Mon Pokédex :
-  </h3>
+  <!-- Conteneur Pokédex bleu -->
+  <div class="pokedex-section">
+    <h3>
+      <img src="images/general/pokedex.png" alt="Pokédex" class="title-icon">
+      Mon Pokédex :
+    </h3>
 
-  <p id="pokedex-count">0 Pokémon capturés</p>
+    <p id="pokedex-count">0 Pokémon capturés</p>
 
-  <!-- Sélecteur de tri -->
-  <select id="sort-select">
-    <option value="capture">Ordre de capture</option>
-    <option value="pokedex">Numéro du Pokédex</option>
-  </select>
+    <!-- Sélecteur de tri -->
+    <select id="sort-select">
+      <option value="capture">Ordre de capture</option>
+      <option value="pokedex">Numéro du Pokédex</option>
+    </select>
 
-  <ul id="pokedex-list"></ul>
+    <ul id="pokedex-list"></ul>
+  </div>
 
   <!-- Nouvelle popup pour afficher les détails d'un Pokémon -->
   <div id="pokemon-popup" class="popup">
