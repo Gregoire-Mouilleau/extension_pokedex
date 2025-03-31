@@ -18,16 +18,25 @@
     </div>
   </div>
 
-  <!-- Conteneur pour le bouton de capture, centré -->
-  <div class="capture-container">
+  <!-- 🎨 Conteneur principal Pokédex -->
+  <div class="pokedex-header">
+    
+    <!-- Contour écran métallique -->
+    <div class="pokedex-screen">
+      <!-- Effet scanner -->
+      <div class="scanner-overlay"></div>
+
+      <!-- Pokémon affiché -->
+      <div id="pokemon-result" class="pokemon-display">
+        <!-- Image du Pokémon -->
+      </div>
+    </div>
+
+    <!-- Bouton pour capturer un Pokémon -->
     <button id="open-pokeball">
       <img src="images/general/pokeball.png" alt="Pokéball" class="button-icon">
       Ouvrir Pokéball
     </button>
-  </div>
-
-  <div id="pokemon-result-container">
-    <div id="pokemon-result"></div>
   </div>
 
   <!-- Conteneur Pokédex bleu -->
@@ -45,6 +54,7 @@
       <option value="pokedex">Numéro du Pokédex</option>
     </select>
 
+    <input type="text" id="search-input" placeholder="Rechercher un Pokémon..." />
     <ul id="pokedex-list"></ul>
   </div>
 
@@ -53,7 +63,7 @@
     <div class="popup-content">
       <span class="close-btn">&times;</span>
       <h2 id="popup-pokemon-name"></h2>
-      <p id="popup-pokemon-rarity"></p> <!-- Ajout de la rareté -->
+      <p id="popup-pokemon-rarity"></p>
       <img id="popup-pokemon-img" src="" alt="Pokémon">
       <p id="popup-pokemon-type"></p>
       <p id="popup-pokemon-description">Chargement...</p>

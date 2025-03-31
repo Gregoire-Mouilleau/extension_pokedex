@@ -5,9 +5,9 @@
     "action": {
       "default_popup": "index.html",
       "default_icon": {
-        "16": "pokeball.png",
-        "48": "pokeball.png",
-        "128": "pokeball.png"
+        "16": "/images/general/pokeball.png",
+        "48": "/images/general/pokeball.png",
+        "128": "/images/general/pokeball.png"
       }
     },
     "permissions": ["storage"],
