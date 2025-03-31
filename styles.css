@@ -62,7 +62,7 @@ button {
   align-items: center;
   justify-content: center;
   border-radius: 6px;
-  background-color: #8e0000; /* Rouge plus foncé que le fond principal */
+  background-color: #8e0000;
   border: 2px solid black;
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.6);
   position: relative;
@@ -94,7 +94,7 @@ button {
 
 .pokemon-result-container {
   position: relative;
-  width: 100px; /* Augmente la taille pour un meilleur ajustement */
+  width: 100px;
   height: 100px;
   border-radius: 50%;
   display: flex;
@@ -127,10 +127,9 @@ button {
 .pokemon-container.common,
 .pokemon-container.rare,
 .pokemon-container.legendary {
-  background-color: #8e0000; /* même fond pour tous */
+  background-color: #8e0000; 
 }
 
-/* Position en haut à droite */
 .top-right-container {
   position: absolute;
   top: 10px;
@@ -140,7 +139,6 @@ button {
   gap: 8px;
 }
 
-/* Style du switch */
 .switch {
 position: relative;
 display: inline-block;
@@ -215,7 +213,6 @@ justify-content: center;
 margin-top: 40px;
 }
 
-/* 🎨 Style inspiré d'un ancien Pokédex */
 .popup {
   display: none;
   position: fixed;
@@ -224,13 +221,13 @@ margin-top: 40px;
   transform: translate(-50%, -50%);
   width: 90%;
   max-width: 350px;
-  background: linear-gradient(to bottom, #D32F2F, #B71C1C); /* Dégradé rouge Pokédex */
+  background: linear-gradient(to bottom, #D32F2F, #B71C1C);
   border-radius: 15px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
   padding: 20px;
   text-align: center;
   z-index: 1001;
-  border: 3px solid #000; /* Bordure noire comme un Pokédex */
+  border: 3px solid #000;
 }
 
 .popup-content {
@@ -248,7 +245,7 @@ margin-top: 40px;
   font-size: 24px;
   cursor: pointer;
   font-weight: bold;
-  color: white; /* Flèche blanche pour contraste */
+  color: white;
   background: black;
   border-radius: 50%;
   width: 30px;
@@ -259,8 +256,8 @@ margin-top: 40px;
 }
 
 .popup h2 {
-  font-family: "Press Start 2P", sans-serif; /* Police rétro type Game Boy */
-  color: #FFD700; /* Jaune doré */
+  font-family: "Press Start 2P", sans-serif; 
+  color: #FFD700;
   text-shadow: 2px 2px 2px black;
   font-size: 16px;
 }
@@ -284,7 +281,6 @@ margin-top: 40px;
   max-width: 100%;
 }
 
-/* Ajout d'un écran pour simuler un affichage rétro */
 .pokedex-screen {
   background: #333;
   padding: 8px;
@@ -298,18 +294,18 @@ margin-top: 40px;
   width: 32px;
   height: 32px;
   object-fit: contain;
-  background-color: rgba(255, 255, 255, 0.15); /* Optionnel : effet de fond léger */
+  background-color: rgba(255, 255, 255, 0.15);
   border: 2px solid rgb(0, 0, 0);
   border-radius: 10px;
   padding: 4px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.4); /* effet de relief */
+  box-shadow: 0 0 5px rgba(0,0,0,0.4);
 }
 .type-container {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 5px; /* Espacement entre les icônes */
+  gap: 5px;
   margin-top: 4px;
 }
 
@@ -323,8 +319,8 @@ margin-top: 40px;
 
 .type-icon-container {
   display: flex;
-  gap: 3px; /* Réduction de l’espace entre les icônes */
-  padding: 3px 4px; /* Cadre plus petit */
+  gap: 3px;
+  padding: 3px 4px;
   border-radius: 5px;
 }
 
@@ -356,30 +352,30 @@ margin-top: 40px;
 }
 
 .rarity-common {
-  background-color: #ccc; /* Gris */
+  background-color: #ccc;
   color: black;
 }
 
 .rarity-rare {
-  background-color: #6db7ff; /* Bleu */
+  background-color: #6db7ff; 
   color: black;
 }
 
 .rarity-legendary {
-  background-color: #ffd700; /* Doré */
+  background-color: #ffd700;
   color: black;
 }
 
 .shiny-indicator {
   position: absolute;
-  top: 30%;  /* Centre verticalement */
-  left: 60%; /* La décale légèrement à droite du cercle */
-  transform: translateY(-50%);  /* Ajuste l'alignement vertical */
-  font-size: 20px;  /* Ajuste la taille */
+  top: 30%;
+  left: 60%;
+  transform: translateY(-50%);
+  font-size: 20px;
 }
 
 .pokedex-section {
-  background: #b71c1c; /* 🔴 Rouge de fond principal */
+  background: #b71c1c;
   border-top: 4px solid #8e0000;
   padding: 15px;
   border-radius: 15px 15px 0 0;
@@ -388,15 +384,13 @@ margin-top: 40px;
   box-shadow: inset 0 0 10px rgba(0,0,0,0.4);
 }
 
-/* 🟡 Titre du Pokédex en style Pokémon */
 .pokedex-section h3 {
-  color: #FFD700; /* Jaune Pokémon */
+  color: #FFD700;
   font-size: 18px;
   text-shadow: 2px 2px 2px black;
   text-align: center;
 }
 
-/* 📌 Nombre de Pokémon capturés */
 .pokedex-section #pokedex-count {
   font-size: 14px;
   font-weight: bold;
@@ -417,7 +411,7 @@ margin-top: 40px;
 
 
 .header-container {
-  background: linear-gradient(to bottom, #ff1c1c, #cc0000); /* Rouge Pokédex */
+  background: linear-gradient(to bottom, #ff1c1c, #cc0000);
   border-radius: 15px;
   padding: 15px;
   display: flex;
@@ -428,7 +422,6 @@ margin-top: 40px;
   border: 4px solid black;
 }
 
-/* 🏆 Style du bouton Pokéball */
 #open-pokeball {
   background: linear-gradient(to bottom, #fff, #ccc);
   border: 3px solid black;
@@ -449,16 +442,11 @@ margin-top: 40px;
   transform: scale(1.05);
 }
 
-/* 🟡 Icône de la Pokéball */
 .button-icon {
   width: 24px;
   height: 24px;
 }
 
-/* 🔵 Style du Pokémon affiché */
-
-
-/* 🌟 Style de l'écran Pokédex */
 .pokedex-header {
   display: flex;
   flex-direction: column;
@@ -473,7 +461,6 @@ margin-top: 40px;
   position: relative;
 }
 
-/* 🖥️ Écran principal */
 .pokedex-screen {
   width: 180px;
   height: 180px;
@@ -488,7 +475,6 @@ margin-top: 40px;
   box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.6);
 }
 
-/* 📷 Fond de l'écran Pokédex avec une image */
 .scanner-overlay {
   position: absolute;
   top: 0;
@@ -496,11 +482,9 @@ margin-top: 40px;
   width: 100%;
   height: 100%;
   background: url('images/general/fond_capture.webp') center/cover no-repeat;
-  opacity: 0.8; /* Ajuste l'opacité pour un effet plus naturel */
+  opacity: 0.8; 
 }
 
-
-/* 📷 Pokémon affiché */
 .pokemon-display img {
   width: 100px;
   height: 100px;
@@ -509,12 +493,11 @@ margin-top: 40px;
   z-index: 2;
 }
 
-/* 🏷️ Nom du Pokémon */
 #pokemon-name {
   font-size: 16px;
   font-weight: bold;
   color: white;
-  background-color: rgba(0, 0, 0, 0.6); /* ✅ Fond noir transparent */
+  background-color: rgba(0, 0, 0, 0.6);
   padding: 4px 10px;
   border-radius: 8px;
   text-shadow: 1px 1px 2px black;
@@ -522,7 +505,6 @@ margin-top: 40px;
   font-family: "Press Start 2P", sans-serif;
 }
 
-/* 🎮 Bouton Pokéball */
 #open-pokeball {
   background: #ffcc00;
   border: 3px solid black;
@@ -550,12 +532,12 @@ margin-top: 40px;
 }
 
 #search-input {
-  background-color: #c62828; /* Rouge foncé rétro */
-  border: 2px solid #ff8a80; /* Bordure rose clair rétro */
+  background-color: #c62828; 
+  border: 2px solid #ff8a80; 
   border-radius: 6px;
   color: white;
   font-weight: bold;
-  font-family: "Press Start 2P", sans-serif; /* Style rétro */
+  font-family: "Press Start 2P", sans-serif;
   padding: 8px 12px;
   font-size: 12px;
   width: 100%;
@@ -567,7 +549,7 @@ margin-top: 40px;
 }
 
 #search-input::placeholder {
-  color: #ffb3b3; /* Rose pâle */
+  color: #ffb3b3; 
   font-weight: normal;
   font-size: 12px;
 }
@@ -596,7 +578,6 @@ margin-top: 40px;
   cursor: pointer;
   text-align: center;
 
-  /* ✅ Ajout de la flèche SVG */
   background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg width='10' height='7' viewBox='0 0 10 7' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='white' d='M0 0l5 7 5-7z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 8px center;
@@ -604,7 +585,7 @@ margin-top: 40px;
 }
 
 #pokemon-popup {
-  max-height: 90vh; /* ou 100% si tu préfères */
+  max-height: 90vh;
   overflow-y: auto;
-  padding-right: 10px; /* pour éviter que la scroll-bar cache le contenu */
+  padding-right: 10px; 
 }

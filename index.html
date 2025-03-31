@@ -7,7 +7,6 @@
 </head>
 <body>
 
-  <!-- Conteneur aligné pour placer le switch en haut à droite -->
   <div class="top-right-container">
     <div class="language-container">
       <label class="switch">
@@ -17,29 +16,19 @@
       <span id="language-label">Français</span>
     </div>
   </div>
-
-  <!-- 🎨 Conteneur principal Pokédex -->
   <div class="pokedex-header">
-    
-    <!-- Contour écran métallique -->
     <div class="pokedex-screen">
-      <!-- Effet scanner -->
       <div class="scanner-overlay"></div>
-
-      <!-- Pokémon affiché -->
       <div id="pokemon-result" class="pokemon-display">
-        <!-- Image du Pokémon -->
       </div>
     </div>
 
-    <!-- Bouton pour capturer un Pokémon -->
     <button id="open-pokeball">
       <img src="images/general/pokeball.png" alt="Pokéball" class="button-icon">
       Ouvrir Pokéball
     </button>
   </div>
 
-  <!-- Conteneur Pokédex bleu -->
   <div class="pokedex-section">
     <h3>
       <img src="images/general/pokedex.png" alt="Pokédex" class="title-icon">
@@ -48,7 +37,6 @@
 
     <p id="pokedex-count">0 Pokémon capturés</p>
 
-    <!-- Sélecteur de tri -->
     <select id="sort-select">
       <option value="capture">Ordre de capture</option>
       <option value="pokedex">Numéro du Pokédex</option>
@@ -58,7 +46,6 @@
     <ul id="pokedex-list"></ul>
   </div>
 
-  <!-- Nouvelle popup pour afficher les détails d'un Pokémon -->
   <div id="pokemon-popup" class="popup">
     <div class="popup-content">
       <span class="close-btn">&times;</span>
