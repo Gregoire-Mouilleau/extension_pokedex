@@ -603,3 +603,8 @@ margin-top: 40px;
   background-size: 12px;
 }
 
+#pokemon-popup {
+  max-height: 90vh; /* ou 100% si tu préfères */
+  overflow-y: auto;
+  padding-right: 10px; /* pour éviter que la scroll-bar cache le contenu */
+}

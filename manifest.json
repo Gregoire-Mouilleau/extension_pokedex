@@ -10,9 +10,10 @@
         "128": "/images/general/pokeball.png"
       }
     },
-    "permissions": ["storage"],
+    "permissions": ["storage","http://localhost:3001/"],
     "host_permissions": [
-      "https://pokeapi.co/api/v2/*"
+      "https://pokeapi.co/api/v2/*",
+      "http://localhost:3001/"
     ]
   }
   

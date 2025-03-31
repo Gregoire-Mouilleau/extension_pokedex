@@ -3,13 +3,12 @@ const pokemonResult = document.getElementById('pokemon-result');
 const pokedexList = document.getElementById('pokedex-list');
 const pokedexCount = document.getElementById('pokedex-count');
 const languageToggle = document.getElementById('language-toggle');
-const languageLabel = document.getElementById('language-label'); // ✅ Ajout de la gestion du texte du switch
+const languageLabel = document.getElementById('language-label');
 const sortSelect = document.getElementById('sort-select');
 const searchInput = document.getElementById('search-input');
 const lastOpenKey = 'lastOpenTimestamp';
 const pokedexKey = 'myPokedex';
 
-// 🎨 Définition des icônes des types
 const typeIcons = {
   normal: "images/type/normal.png",
   fire: "images/type/fire.png",
@@ -31,14 +30,12 @@ const typeIcons = {
   fairy: "images/type/fairy.png"
 };
 
-// 🟢 Fonction pour afficher les icônes des types
 function getTypeIcons(types) {
     return types.split(", ").map(type =>
         `<img src="${typeIcons[type]}" alt="${type}" class="type-icon">`
     ).join(" ");
 }
 
-// 🟢 Fonction pour récupérer les détails d'un Pokémon avec la langue sélectionnée
 async function fetchPokemonById(pokemonId) {
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
     if (!res.ok) throw new Error('Erreur API Pokémon');
@@ -53,7 +50,7 @@ async function fetchPokemonById(pokemonId) {
         id: pokemon.id,
         name: pokemonName,
         img: pokemon.sprites.front_default,
-        shinyImg: pokemon.sprites.front_shiny, // 🔹 Ajout du sprite shiny
+        shinyImg: pokemon.sprites.front_shiny,
         rarity: speciesData.is_legendary || speciesData.is_mythical ? "legendary" :
                 speciesData.capture_rate <= 45 ? "rare" : "common",
         type: pokemon.types.map(t => t.type.name).join(", "),
@@ -61,55 +58,79 @@ async function fetchPokemonById(pokemonId) {
     };
 }
 
-// 🟢 Fonction pour afficher la popup d'un Pokémon
-function displayPokemonPopup(pokemon) {
-    document.getElementById("popup-pokemon-name").textContent = pokemon.name;
+async function fetchAnecdote(pokemonName) {
+  try {
+      const res = await fetch("http://localhost:3001/anecdote", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ pokemonName })
+      });
 
-    // Supprimer toute rareté existante avant d'en ajouter une nouvelle
-    let existingRarity = document.getElementById("popup-pokemon-rarity");
-    if (existingRarity) {
-        existingRarity.remove();
-    }
+      const data = await res.json();
+      return data.anecdote;
+  } catch (err) {
+      console.error("Erreur lors de la récupération de l’anecdote :", err);
+      return "Anecdote indisponible pour le moment.";
+  }
+}
 
-    // Créer un nouvel élément pour afficher la rareté
-    let rarityContainer = document.createElement("div");
-    rarityContainer.id = "popup-pokemon-rarity";
-    rarityContainer.classList.add("rarity-container");
+async function displayPokemonPopup(pokemon) {
+  document.getElementById("popup-pokemon-name").textContent = pokemon.name;
 
-    // Définir la couleur de fond et le texte selon la rareté
-    if (pokemon.rarity === "common") {
-        rarityContainer.classList.add("rarity-common");
-        rarityContainer.textContent = "Commun";
-    } else if (pokemon.rarity === "rare") {
-        rarityContainer.classList.add("rarity-rare");
-        rarityContainer.textContent = "Rare";
-    } else if (pokemon.rarity === "legendary") {
-        rarityContainer.classList.add("rarity-legendary");
-        rarityContainer.textContent = "Légendaire";
-    }
+  let existingRarity = document.getElementById("popup-pokemon-rarity");
+  if (existingRarity) {
+      existingRarity.remove();
+  }
 
-    // Insérer la rareté sous le nom et au-dessus de l'image
-    let popupName = document.getElementById("popup-pokemon-name");
-    popupName.insertAdjacentElement("afterend", rarityContainer);
+  let rarityContainer = document.createElement("div");
+  rarityContainer.id = "popup-pokemon-rarity";
+  rarityContainer.classList.add("rarity-container");
 
-    document.getElementById("popup-pokemon-img").src = pokemon.img;
+  if (pokemon.rarity === "common") {
+      rarityContainer.classList.add("rarity-common");
+      rarityContainer.textContent = "Commun";
+  } else if (pokemon.rarity === "rare") {
+      rarityContainer.classList.add("rarity-rare");
+      rarityContainer.textContent = "Rare";
+  } else if (pokemon.rarity === "legendary") {
+      rarityContainer.classList.add("rarity-legendary");
+      rarityContainer.textContent = "Légendaire";
+  }
 
-    document.getElementById("popup-pokemon-type").innerHTML = `
-        <div class="type-container">
-            <span class="type-label">Type :</span>
-            <div class="type-icon-container">
-                ${getTypeIcons(pokemon.type)}
-            </div>
-        </div>
-    `;
+  const popupName = document.getElementById("popup-pokemon-name");
+  popupName.insertAdjacentElement("afterend", rarityContainer);
+  document.getElementById("popup-pokemon-img").src = pokemon.img;
+  document.getElementById("popup-pokemon-type").innerHTML = `
+      <div class="type-container">
+          <span class="type-label">Type :</span>
+          <div class="type-icon-container">
+              ${getTypeIcons(pokemon.type)}
+          </div>
+      </div>
+  `;
 
-    document.getElementById("popup-pokemon-description").textContent = pokemon.description;
-    document.getElementById("pokemon-popup").style.display = "block";
+  const descriptionEl = document.getElementById("popup-pokemon-description");
+  descriptionEl.textContent = pokemon.description;
 
-    // ✅ Réactiver le bouton de fermeture
-    document.querySelector(".close-btn").onclick = () => {
-        document.getElementById("pokemon-popup").style.display = "none";
-    };
+  // Anecdote IA via Ollama
+  fetchAnecdote(pokemon.name).then(anecdote => {
+      const anecdoteEl = document.createElement("p");
+      anecdoteEl.textContent = "📌 Anecdote : " + anecdote;
+      anecdoteEl.style.marginTop = "10px";
+      anecdoteEl.style.fontStyle = "italic";
+      anecdoteEl.style.color = "white";
+      anecdoteEl.style.textAlign = "justify";
+      anecdoteEl.style.maxWidth = "90%";
+      anecdoteEl.style.fontSize = "14px";
+      descriptionEl.insertAdjacentElement("afterend", anecdoteEl);
+  });
+
+  document.getElementById("pokemon-popup").style.display = "block";
+  document.querySelector(".close-btn").onclick = () => {
+      document.getElementById("pokemon-popup").style.display = "none";
+  };
 }
 
 async function displayPokedex() {
@@ -126,7 +147,7 @@ async function displayPokedex() {
         }
 
         const sortOption = sortSelect?.value || "capture";
-        const sortedPokedex = [...filteredPokedex]; // copie sécurisée
+        const sortedPokedex = [...filteredPokedex];
         
         if (sortOption === "pokedex") {
             sortedPokedex.sort((a, b) => a.id - b.id);
@@ -167,7 +188,7 @@ async function displayPokedex() {
         
                     if (updated) {
                         chrome.storage.local.set({ [pokedexKey]: pokedex }, () => {
-                            displayPokedex(); // Rafraîchir l'affichage après suppression du badge "NEW"
+                            displayPokedex();
                         });
                     }
                 });
@@ -184,7 +205,6 @@ async function displayPokedex() {
     });
 }
 
-// 🟢 Ajout de l'écouteur d'événements pour gérer le tri
 sortSelect?.addEventListener('change', displayPokedex);
 
 pokeballBtn?.addEventListener('click', async () => {
@@ -195,7 +215,7 @@ pokeballBtn?.addEventListener('click', async () => {
     if (now - lastOpen >= 1000) {
       try {
         const pokemonId = Math.floor(Math.random() * 1025) + 1;
-        const isShiny = Math.random() < 0.5;
+        const isShiny = Math.random() < 0.02; // Changer taux shiny 
         const pokemon = await fetchPokemonById(pokemonId);
         pokemon.isShiny = isShiny;
   
@@ -219,7 +239,6 @@ pokeballBtn?.addEventListener('click', async () => {
             });
           } else {
             const existing = pokedex[index];
-            // Met à jour l’image si la version shiny est nouvelle
             if (!existing.isShiny && pokemon.isShiny) {
               pokedex[index] = {
                 ...existing,
@@ -231,7 +250,6 @@ pokeballBtn?.addEventListener('click', async () => {
             }
           }
   
-          // Affichage du Pokémon capturé
           pokemonResult.innerHTML = `
             <div class="pokemon-result-container ${pokemon.rarity}">
                 <img src="${pokemon.isShiny ? pokemon.shinyImg : pokemon.img}" class="${pokemon.isShiny ? 'shiny-effect' : ''}">
@@ -247,7 +265,6 @@ pokeballBtn?.addEventListener('click', async () => {
             displayPokedex();
           });
   
-          // Supprime le badge NEW après 5s si shiny ou nouveau
           if (isNew || updatedSprite) {
             setTimeout(() => {
               pokedex = pokedex.map(p =>
@@ -266,15 +283,13 @@ pokeballBtn?.addEventListener('click', async () => {
     }
   });
 
-// 🟢 Gestion du changement de langue et mise à jour du label du switch
 languageToggle?.addEventListener('change', () => {
     const newLanguage = languageToggle.checked ? 'en' : 'fr';
     localStorage.setItem('selectedLanguage', newLanguage);
-    languageLabel.textContent = newLanguage === "en" ? "English" : "Français"; // ✅ Mise à jour du texte du switch
+    languageLabel.textContent = newLanguage === "en" ? "English" : "Français";
     displayPokedex();
 });
 
-// 🟢 Charger la langue et mettre à jour le Pokédex
 document.addEventListener('DOMContentLoaded', () => {
     searchInput?.addEventListener("input", displayPokedex);
     languageLabel.textContent = localStorage.getItem('selectedLanguage') === "en" ? "English" : "Français";
