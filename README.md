@@ -72,7 +72,7 @@ POST http://localhost:3001/anecdote
 
 ## ✅ Utilisation
 
-- Cliquez sur la Pokéball pour capturer un Pokémon.
+- Cliquez sur la Pokéball pour capturer un Pokémon (5 secondes de cooldown entre chaque capture).
 - Si le Pokémon est nouveau ou shiny, il sera marqué "NEW".
 - Cliquez sur un Pokémon du Pokédex pour afficher sa fiche détaillée.
 - L’anecdote générée apparaît dans la popup, une seule fois par ouverture.
@@ -89,6 +89,6 @@ POST http://localhost:3001/anecdote
 
 ---
 
-## 👨‍💻 Auteur
+## 👨‍💻 Auteurs
 
 Grégoire Mouilleau & Nicolas Puig — EPSI
