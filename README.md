@@ -1,7 +1,7 @@
 
 # 📦 Extension Chrome Pokédex avec IA
 
-Une extension Chrome interactive pour capturer des Pokémon, les afficher dans un Pokédex personnalisé, et découvrir une **anecdote générée par une IA locale** (grâce à [Ollama](https://ollama.com)) pour chaque Pokémon.
+Une extension Chrome pour capturer des Pokémon, les afficher dans un Pokédex, et découvrir une **anecdote générée par une IA** (grâce à [Ollama](https://ollama.com)) pour chaque Pokémon.
 
 ## ⚙️ Fonctionnalités
 
