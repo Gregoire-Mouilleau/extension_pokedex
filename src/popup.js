@@ -114,18 +114,23 @@ async function displayPokemonPopup(pokemon) {
   const descriptionEl = document.getElementById("popup-pokemon-description");
   descriptionEl.textContent = pokemon.description;
 
-  // Anecdote IA via Ollama
-  fetchAnecdote(pokemon.name).then(anecdote => {
-      const anecdoteEl = document.createElement("p");
-      anecdoteEl.textContent = "📌 Anecdote : " + anecdote;
-      anecdoteEl.style.marginTop = "10px";
-      anecdoteEl.style.fontStyle = "italic";
-      anecdoteEl.style.color = "white";
-      anecdoteEl.style.textAlign = "justify";
-      anecdoteEl.style.maxWidth = "90%";
-      anecdoteEl.style.fontSize = "14px";
-      descriptionEl.insertAdjacentElement("afterend", anecdoteEl);
-  });
+// Supprimer anecdote existante si elle existe déjà
+const oldAnecdote = document.getElementById("popup-anecdote");
+if (oldAnecdote) oldAnecdote.remove();
+
+// Anecdote IA via Ollama
+fetchAnecdote(pokemon.name).then(anecdote => {
+    const anecdoteEl = document.createElement("p");
+    anecdoteEl.id = "popup-anecdote"; // AJOUT DE L'ID ICI
+    anecdoteEl.textContent = "📌 Anecdote : " + anecdote;
+    anecdoteEl.style.marginTop = "10px";
+    anecdoteEl.style.fontStyle = "italic";
+    anecdoteEl.style.color = "white";
+    anecdoteEl.style.textAlign = "justify";
+    anecdoteEl.style.maxWidth = "90%";
+    anecdoteEl.style.fontSize = "14px";
+    descriptionEl.insertAdjacentElement("afterend", anecdoteEl);
+});
 
   document.getElementById("pokemon-popup").style.display = "block";
   document.querySelector(".close-btn").onclick = () => {
@@ -212,7 +217,7 @@ pokeballBtn?.addEventListener('click', async () => {
     const result = await chrome.storage.local.get([lastOpenKey]);
     const lastOpen = result[lastOpenKey] || 0;
   
-    if (now - lastOpen >= 1000) {
+    if (now - lastOpen >= 5000) {
       try {
         const pokemonId = Math.floor(Math.random() * 1025) + 1;
         const isShiny = Math.random() < 0.02; // Changer taux shiny 

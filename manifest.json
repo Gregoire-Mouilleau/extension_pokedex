@@ -1,19 +1,18 @@
 {
-    "manifest_version": 3,
-    "name": "Mon Pokédex",
-    "version": "1.0",
-    "action": {
-      "default_popup": "index.html",
-      "default_icon": {
-        "16": "/images/general/pokeball.png",
-        "48": "/images/general/pokeball.png",
-        "128": "/images/general/pokeball.png"
-      }
-    },
-    "permissions": ["storage","http://localhost:3001/"],
-    "host_permissions": [
-      "https://pokeapi.co/api/v2/*",
-      "http://localhost:3001/"
-    ]
-  }
-  
+  "manifest_version": 3,
+  "name": "Mon Pokédex",
+  "version": "1.0",
+  "action": {
+    "default_popup": "src/index.html",
+    "default_icon": {
+      "16": "src/images/general/pokeball.png",
+      "48": "src/images/general/pokeball.png",
+      "128": "src/images/general/pokeball.png"
+    }
+  },
+  "permissions": ["storage", "http://localhost:3001/"],
+  "host_permissions": [
+    "https://pokeapi.co/api/v2/*",
+    "http://localhost:3001/"
+  ]
+}
